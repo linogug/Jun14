@@ -7,6 +7,7 @@
 //
 
 #import "Jun14AppDelegate.h"
+#import "Myview.h"
 
 @implementation Jun14AppDelegate
 
@@ -20,10 +21,43 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+   // self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+	UIScreen *screen = [UIScreen mainScreen];
+	CGRect applicationFrame = screen.applicationFrame;
+	CGRect applicationFrame1 = CGRectMake ((applicationFrame.origin.x), (applicationFrame.origin.y),(applicationFrame.size.width),(applicationFrame.size.height)/2);
+	CGRect applicationFrame2 = CGRectMake ((applicationFrame.origin.x), (applicationFrame.size.height)/2,(applicationFrame.size.width),(applicationFrame.size.height)/2);	
+	CGRect bounds = screen.bounds;
+	
+	view1 = [[Myview alloc] initWithFrame:applicationFrame1];
+	view2 = [[Myview alloc] initWithFrame:applicationFrame2];
+	self.window = [[UIWindow alloc] initWithFrame: bounds];
+	
+	
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+  //  self.window.backgroundColor = [UIColor yellowColor];
+   
+	
+	[self.window addSubview: view1];
+	 [view1 setcolor:[UIColor redColor]];
+	NSURL *url = [[NSURL alloc] initWithString:@"http://finance.yahoo.com/d/quotes.csv?s=GE&f=sl1t1"];
+	
+	NSError *error;
+	NSString *string = [[NSString alloc] initWithContentsOfURL: url encoding: NSUTF8StringEncoding error: &error];
+	if (string == nil) {
+		string = [error localizedDescription];	
+	}
+	[view1 setstring: string];
+	[view1 setpoint: 10 : 55];
+	
+	
+	[self.window addSubview: view2];
+	[view2 setcolor:[UIColor yellowColor]];
+//	UIDevice *device = [UIDevice currentDevice];
+//	NSString *devicestring = device.systemVersion;
+//	[view2 setstring: devicestring];
+//	[view2 setpoint: 0.00 :50];
+	
+	[self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -42,6 +76,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
 	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+	[view1 setNeedsDisplay];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
